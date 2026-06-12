@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jogo do Amor ❤️</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:Segoe UI,sans-serif;
+  color:#5a2238;
+  overflow:hidden;
+  background:linear-gradient(135deg,#fff7fa,#ffe3ec,#ffd6e5);
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:var(--main-bg);
+  background-size:cover;
+  background-position:center;
+  filter:blur(2px);
+  opacity:.45;
+  z-index:-3;
+}
+
+body::after{
+  content:"❤️ ❤️ ❤️ ❤️ ❤️ ❤️ ❤️ ❤️";
+  position:fixed;
+  inset:0;
+  font-size:32px;
+  line-height:90px;
+  letter-spacing:28px;
+  color:rgba(255,143,171,.18);
+  z-index:-2;
+  overflow:hidden;
+}
+
+.slider{
+  display:flex;
+  width:800vw;
+  height:100vh;
+  transition:transform 1s cubic-bezier(.77,0,.18,1);
+}
+
+.slide{
+  width:100vw;
+  height:100vh;
+  flex-shrink:0;
+  padding:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.box{
+  width:100%;
+  max-width:900px;
+  max-height:92vh;
+  overflow:auto;
+  padding:28px;
+  border-radius:34px;
+  text-align:center;
+  background:rgba(255,255,255,.78);
+  backdrop-filter:blur(22px);
+  border:1px solid rgba(255,170,200,.5);
+  box-shadow:0 25px 70px rgba(255,120,170,.28);
+}
+
+.phase-in{animation:phaseIn .8s ease}
+@keyframes phaseIn{
+  from{opacity:0;transform:scale(.92) translateY(25px)}
+  to{opacity:1;transform:scale(1) translateY(0)}
+}
+
+h1{
+  font-size:clamp(2.5rem,7vw,5.5rem);
+  line-height:1;
+  margin-bottom:20px;
+  color:#b83263;
+}
+
+h2{
+  font-size:clamp(1.8rem,4vw,3rem);
+  margin-bottom:16px;
+  color:#b83263;
+}
+
+p{
+  font-size:1.05rem;
+  line-height:1.7;
+  opacity:.95;
+}
+
+button{
+  border:none;
+  margin:10px;
+  padding:14px 28px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#ff8fab,#ffd1dc);
+  color:#5a1230;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 15px 35px rgba(255,143,171,.38);
+  transition:.3s;
+}
+
+button:hover{
+  transform:translateY(-4px) scale(1.04);
+}
+
+.hidden{display:none}
+
+.memory-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:9px;
+  max-width:680px;
+  margin:18px auto;
+}
+
+.memory-card{
+  aspect-ratio:1/1;
+  border-radius:16px;
+  background:linear-gradient(135deg,#ffd1dc,#fff0f5);
+  color:#b83263;
+  font-size:1.8rem;
+  overflow:hidden;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,143,171,.45);
+}
+
+.memory-card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.option{
+  display:block;
+  width:100%;
+  max-width:520px;
+  margin:10px auto;
+}
+
+.choice-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:15px;
+  margin-top:25px;
+}
+
+.choice{
+  min-height:110px;
+  border-radius:24px;
+  background:linear-gradient(135deg,#ffe3ec,#fff7fa);
+  color:#8f244e;
+  border:1px solid rgba(255,143,171,.4);
+  font-size:1.1rem;
+}
+
+.video-frame{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  margin-top:20px;
+}
+
+video{
+  width:min(360px,90vw);
+  aspect-ratio:9/16;
+  max-height:72vh;
+  object-fit:cover;
+  border-radius:30px;
+  box-shadow:0 25px 70px rgba(255,120,170,.35);
+  background:#000;
+}
+
+.success{
+  margin-top:16px;
+  padding:15px;
+  border-radius:22px;
+  background:rgba(255,209,220,.8);
+  border:1px solid rgba(255,143,171,.55);
+  font-weight:800;
+  color:#8f244e;
+  animation:successPop .6s ease;
+}
+
+@keyframes successPop{
+  0%{transform:scale(.7);opacity:0}
+  70%{transform:scale(1.07)}
+  100%{transform:scale(1);opacity:1}
+}
+
+.album-card{
+  width:100%;
+  max-width:650px;
+  height:430px;
+  margin:25px auto;
+  border-radius:32px;
+  overflow:hidden;
+  position:relative;
+  box-shadow:0 30px 80px rgba(255,120,170,.35),0 0 40px rgba(255,143,171,.28);
+  animation:floatAlbum 4s ease-in-out infinite;
+  background:#fff0f5;
+}
+
+.album-card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.shine{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,transparent 20%,rgba(255,255,255,.65) 50%,transparent 80%);
+  transform:translateX(-120%);
+}
+
+.album-card.change{animation:flipMemory .9s ease}
+.album-card.change .shine{animation:shinePass .9s ease}
+
+.memory-counter{
+  margin-top:15px;
+  font-weight:800;
+  color:#b83263;
+}
+
+.fade-text{
+  opacity:0;
+  transform:translateY(15px);
+}
+
+#albumMessage{transition:.5s}
+
+@keyframes shinePass{to{transform:translateX(120%)}}
+@keyframes flipMemory{
+  0%{transform:rotateY(0) scale(1)}
+  50%{transform:rotateY(90deg) scale(.95)}
+  100%{transform:rotateY(0) scale(1)}
+}
+@keyframes floatAlbum{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+
+.nav{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:8px;
+  z-index:10;
+}
+
+.dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:rgba(184,50,99,.28);
+}
+
+.dot.active{
+  width:28px;
+  border-radius:20px;
+  background:#ff8fab;
+}
+
+.back{
+  position:fixed;
+  left:18px;
+  top:18px;
+  z-index:20;
+}
+
+.explosion{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:50;
+  pointer-events:none;
+}
+
+.explosion::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle,rgba(255,255,255,.72),rgba(255,214,229,.36) 42%,rgba(255,214,229,0) 70%);
+  backdrop-filter:blur(5px);
+  animation:softFlash 1.15s ease forwards;
+}
+
+.explosion.active{display:flex}
+
+.big-heart{
+  position:relative;
+  font-size:5.8rem;
+  filter:drop-shadow(0 18px 28px rgba(184,50,99,.28));
+  animation:proHeart 1.15s cubic-bezier(.2,.9,.2,1) forwards;
+}
+
+.big-heart::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:150px;
+  height:150px;
+  border:2px solid rgba(255,143,171,.55);
+  border-radius:50%;
+  transform:translate(-50%,-50%) scale(.2);
+  animation:heartRing 1.15s ease forwards;
+}
+
+@keyframes softFlash{
+  0%{opacity:0}
+  25%{opacity:1}
+  100%{opacity:0}
+}
+
+@keyframes proHeart{
+  0%{transform:scale(.35) rotate(-8deg);opacity:0}
+  38%{transform:scale(1.12) rotate(3deg);opacity:1}
+  72%{transform:scale(.98) rotate(0)}
+  100%{transform:scale(1.55);opacity:0}
+}
+
+@keyframes heartRing{
+  to{transform:translate(-50%,-50%) scale(2.25);opacity:0}
+}
+
+.particle{
+  position:fixed;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#ff8fab,#ffd1dc);
+  box-shadow:0 0 18px rgba(255,143,171,.55);
+  z-index:60;
+  animation:particleFly 1.05s cubic-bezier(.16,.84,.38,1) forwards;
+}
+
+.particle.heart{
+  width:auto;
+  height:auto;
+  background:transparent;
+  box-shadow:none;
+  font-size:18px;
+  border-radius:0;
+}
+
+@keyframes particleFly{
+  0%{transform:translate(0,0) scale(.7);opacity:0}
+  18%{opacity:1}
+  100%{transform:translate(var(--x),var(--y)) scale(.15) rotate(var(--r));opacity:0}
+}
+
+.carta{
+  position:relative;
+  background:white;
+  color:#5a2238;
+  border-radius:30px;
+  padding:35px;
+  overflow:hidden;
+  animation:letterOpen 1s ease;
+  box-shadow:0 25px 70px rgba(255,120,170,.28);
+  text-align:left;
+}
+
+.carta h2{
+  text-align:center;
+}
+
+.carta p{
+  margin-bottom:18px;
+}
+
+.carta::before{
+  content:"💌";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,#ff8fab,#ffd1dc);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:6rem;
+  animation:envelopeOpen 1.4s ease forwards;
+  transform-origin:top;
+}
+
+@keyframes envelopeOpen{
+  0%{transform:rotateX(0);opacity:1}
+  70%{transform:rotateX(100deg);opacity:1}
+  100%{transform:rotateX(110deg);opacity:0;pointer-events:none}
+}
+
+@keyframes letterOpen{
+  from{transform:translateY(40px) scale(.9);opacity:0}
+  to{transform:translateY(0) scale(1);opacity:1}
+}
+
+.music-hidden{
+  display:none;
+}
+
+.music-float{
+  position:fixed;
+  right:18px;
+  bottom:62px;
+  z-index:30;
+  display:none;
+  padding:12px 18px;
+  font-size:.9rem;
+}
+
+.music-float.show{
+  display:block;
+  animation:successPop .6s ease;
+}
+
+/* LABIRINTO DO AMOR */
+.maze-wrap{
+  width:min(760px,92vw);
+  margin:20px auto 8px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:18px;
+  align-items:center;
+}
+
+.maze-game{
+  width:min(520px,86vw);
+  aspect-ratio:1/1;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(9,1fr);
+  grid-template-rows:repeat(9,1fr);
+  gap:4px;
+  padding:12px;
+  border-radius:30px;
+  background:linear-gradient(135deg,#fff7fa,#ffe3ec);
+  border:2px solid rgba(255,143,171,.45);
+  box-shadow:inset 0 0 38px rgba(255,143,171,.18),0 22px 55px rgba(255,120,170,.22);
+}
+
+.maze-cell{
+  border-radius:13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.28rem;
+  position:relative;
+  transition:.28s ease;
+}
+
+.maze-wall{
+  background:linear-gradient(135deg,#b83263,#8f244e);
+  box-shadow:inset 0 0 12px rgba(255,255,255,.12);
+}
+
+.maze-path{
+  background:rgba(255,255,255,.82);
+  border:1px solid rgba(255,143,171,.22);
+}
+
+.maze-visited{
+  background:linear-gradient(135deg,#ffe3ec,#fff7fa);
+  box-shadow:inset 0 0 0 2px rgba(255,143,171,.28);
+}
+
+.maze-player{
+  background:linear-gradient(135deg,#ff8fab,#ffd1dc);
+  transform:scale(1.08);
+  box-shadow:0 10px 25px rgba(255,143,171,.4);
+  animation:playerPulse .9s ease infinite alternate;
+}
+
+.maze-goal{
+  background:linear-gradient(135deg,#fff0f5,#ffd1dc);
+  box-shadow:inset 0 0 0 2px rgba(255,143,171,.45);
+}
+
+@keyframes playerPulse{
+  from{filter:brightness(1)}
+  to{filter:brightness(1.12)}
+}
+
+.shake-board{
+  animation:shake .35s ease;
+}
+
+.maze-controls{
+  display:grid;
+  grid-template-columns:repeat(3,62px);
+  grid-template-rows:repeat(3,62px);
+  gap:8px;
+  justify-content:center;
+}
+
+.maze-controls button{
+  width:62px;
+  height:62px;
+  padding:0;
+  margin:0;
+  font-size:1.45rem;
+  border-radius:22px;
+}
+
+.maze-controls .empty{
+  visibility:hidden;
+}
+
+.maze-tip{
+  font-weight:800;
+  color:#8f244e;
+  margin-top:10px;
+}
+
+.maze-mini{
+  font-size:.95rem;
+  opacity:.9;
+}
+
+
+
+/* EFEITOS PROFISSIONAIS E DISCRETOS */
+.soft-bg{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+  background:
+    radial-gradient(circle at 18% 20%,rgba(255,143,171,.18),transparent 28%),
+    radial-gradient(circle at 82% 72%,rgba(184,50,99,.12),transparent 30%);
+  animation:softBgMove 12s ease-in-out infinite alternate;
+}
+
+@keyframes softBgMove{
+  from{filter:hue-rotate(0deg);opacity:.75}
+  to{filter:hue-rotate(8deg);opacity:1}
+}
+
+.love-toast{
+  position:fixed;
+  top:24px;
+  left:50%;
+  transform:translate(-50%,-18px);
+  z-index:80;
+  padding:12px 22px;
+  border-radius:999px;
+  background:rgba(255,255,255,.82);
+  color:#8f244e;
+  border:1px solid rgba(255,143,171,.45);
+  box-shadow:0 18px 45px rgba(184,50,99,.18);
+  backdrop-filter:blur(18px);
+  font-weight:900;
+  opacity:0;
+  pointer-events:none;
+}
+
+.love-toast.show{
+  animation:toastElegant 1.45s ease forwards;
+}
+
+@keyframes toastElegant{
+  0%{opacity:0;transform:translate(-50%,-18px) scale(.96)}
+  18%,72%{opacity:1;transform:translate(-50%,0) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-10px) scale(.98)}
+}
+
+.sparkle{
+  position:fixed;
+  pointer-events:none;
+  z-index:70;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:rgba(255,255,255,.95);
+  box-shadow:0 0 14px rgba(255,143,171,.75);
+  animation:sparkleSoft .85s ease forwards;
+}
+
+@keyframes sparkleSoft{
+  0%{transform:translate(-50%,-50%) scale(.4);opacity:0}
+  25%{opacity:1}
+  100%{transform:translate(var(--sx),var(--sy)) scale(.2);opacity:0}
+}
+
+.carta{
+  animation:letterOpen 1s ease, cartaGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes cartaGlow{
+  from{box-shadow:0 25px 70px rgba(255,120,170,.24)}
+  to{box-shadow:0 28px 82px rgba(184,50,99,.30)}
+}
+
+@media(max-width:650px){
+  .box{padding:20px}
+  .memory-grid{grid-template-columns:repeat(4,1fr);gap:6px}
+  .memory-card{border-radius:12px;font-size:1.4rem}
+  .album-card{height:330px}
+  .maze-wrap{grid-template-columns:1fr;gap:12px}
+  .maze-game{width:min(360px,86vw);gap:3px;padding:9px;border-radius:24px}
+  .maze-cell{border-radius:9px;font-size:1rem}
+  .maze-controls{grid-template-columns:repeat(3,54px);grid-template-rows:repeat(3,54px)}
+  .maze-controls button{width:54px;height:54px;border-radius:18px}
+}
+
+
+
+/* ================= VERSÃO PREMIUM ================= */
+:root{
+  --rose-900:#5a1f35;
+  --rose-700:#9f2f5b;
+  --rose-500:#e76f95;
+  --rose-300:#ffc2d4;
+  --cream:#fffaf7;
+  --glass:rgba(255,255,255,.66);
+}
+
+body{
+  color:var(--rose-900);
+  background:
+    radial-gradient(circle at 14% 18%,rgba(255,194,212,.55),transparent 30%),
+    radial-gradient(circle at 84% 16%,rgba(255,232,238,.75),transparent 34%),
+    linear-gradient(135deg,#fffaf7 0%,#ffeaf1 48%,#fff5f8 100%);
+}
+
+body::before{
+  filter:blur(3px) saturate(1.08) brightness(1.06);
+  opacity:.48;
+}
+
+body::after{
+  content:"";
+  background:
+    linear-gradient(120deg,transparent 0%,rgba(255,255,255,.38) 45%,transparent 64%),
+    radial-gradient(circle at 50% 50%,rgba(255,255,255,.18),transparent 55%);
+  opacity:.28;
+  animation:premiumLight 9s ease-in-out infinite alternate;
+}
+
+@keyframes premiumLight{
+  from{transform:translateX(-2%) translateY(-1%)}
+  to{transform:translateX(2%) translateY(1%)}
+}
+
+.slide{padding:22px}
+
+.box{
+  max-width:940px;
+  padding:34px;
+  border-radius:38px;
+  background:linear-gradient(145deg,rgba(255,255,255,.78),rgba(255,247,250,.54));
+  border:1px solid rgba(255,255,255,.72);
+  box-shadow:
+    0 30px 90px rgba(90,31,53,.16),
+    inset 0 1px 0 rgba(255,255,255,.9),
+    inset 0 -1px 0 rgba(255,194,212,.28);
+  position:relative;
+}
+
+.box::before{
+  content:"";
+  position:absolute;
+  inset:1px;
+  border-radius:37px;
+  pointer-events:none;
+  background:linear-gradient(135deg,rgba(255,255,255,.55),transparent 36%,rgba(255,194,212,.18));
+  mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);
+}
+
+.phase-in{animation:premiumPhase .75s cubic-bezier(.16,1,.3,1)}
+@keyframes premiumPhase{
+  from{opacity:0;transform:translateY(22px) scale(.985);filter:blur(7px)}
+  to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+}
+
+h1,h2{
+  letter-spacing:-.04em;
+  color:var(--rose-700);
+  text-shadow:0 8px 32px rgba(184,50,99,.12);
+}
+
+h1::after,h2::after{
+  content:"";
+  display:block;
+  width:74px;
+  height:3px;
+  margin:16px auto 0;
+  border-radius:99px;
+  background:linear-gradient(90deg,transparent,var(--rose-500),transparent);
+  opacity:.8;
+}
+
+p{color:#6f3148;opacity:.92}
+
+button{
+  background:linear-gradient(135deg,#fff,#ffd5e0 42%,#ff9fba);
+  color:#72213f;
+  border:1px solid rgba(255,255,255,.76);
+  box-shadow:0 14px 36px rgba(184,50,99,.18), inset 0 1px 0 rgba(255,255,255,.85);
+  transition:transform .25s ease, box-shadow .25s ease, filter .25s ease;
+}
+button:hover{
+  transform:translateY(-3px) scale(1.025);
+  box-shadow:0 18px 44px rgba(184,50,99,.22), inset 0 1px 0 rgba(255,255,255,.9);
+  filter:saturate(1.05);
+}
+button:active{transform:translateY(-1px) scale(.99)}
+
+.nav{
+  padding:9px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.52);
+  backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,.7);
+  box-shadow:0 16px 44px rgba(90,31,53,.12);
+}
+.dot{background:rgba(159,47,91,.18)}
+.dot.active{background:linear-gradient(90deg,#e76f95,#ffc2d4)}
+
+.back{
+  width:46px;
+  height:46px;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,255,255,.68);
+  backdrop-filter:blur(16px);
+}
+
+.memory-grid{gap:12px;max-width:700px}
+.memory-card{
+  border-radius:22px;
+  background:linear-gradient(145deg,#fff,#ffe5ee);
+  border:1px solid rgba(255,255,255,.75);
+  box-shadow:0 12px 28px rgba(184,50,99,.10);
+}
+.memory-card.matched{box-shadow:0 0 0 2px rgba(231,111,149,.24),0 14px 34px rgba(184,50,99,.12)}
+.memory-card img{transition:transform .45s ease}
+.memory-card:hover img{transform:scale(1.04)}
+
+.album-card{
+  border-radius:38px;
+  border:1px solid rgba(255,255,255,.72);
+  box-shadow:0 32px 95px rgba(90,31,53,.17),0 0 0 10px rgba(255,255,255,.22);
+  animation:premiumAlbum 5s ease-in-out infinite;
+}
+@keyframes premiumAlbum{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-8px) scale(1.006)}
+}
+.memory-counter{
+  display:inline-flex;
+  padding:9px 16px;
+  border-radius:999px;
+  background:rgba(255,255,255,.58);
+  border:1px solid rgba(255,255,255,.7);
+  box-shadow:0 12px 26px rgba(184,50,99,.10);
+}
+
+.choice,.option{
+  border:1px solid rgba(255,255,255,.72);
+  background:linear-gradient(145deg,rgba(255,255,255,.84),rgba(255,230,238,.78));
+}
+.choice{min-height:118px;font-size:1.08rem}
+
+.video-frame video{
+  border:1px solid rgba(255,255,255,.65);
+  box-shadow:0 30px 90px rgba(90,31,53,.2);
+}
+
+.success{
+  background:linear-gradient(135deg,rgba(255,255,255,.86),rgba(255,226,236,.82));
+  border:1px solid rgba(255,255,255,.72);
+  box-shadow:0 18px 42px rgba(184,50,99,.13);
+}
+
+.explosion::before{
+  background:radial-gradient(circle,rgba(255,255,255,.74),rgba(255,235,241,.28) 44%,rgba(255,235,241,0) 72%);
+  backdrop-filter:blur(3px);
+}
+.big-heart{
+  font-size:5.2rem;
+  filter:drop-shadow(0 22px 34px rgba(90,31,53,.18));
+}
+.particle{
+  width:8px;height:8px;
+  background:linear-gradient(135deg,#fff,#ffb5ca);
+  box-shadow:0 0 18px rgba(231,111,149,.45);
+}
+.particle.heart{font-size:15px;opacity:.85}
+
+.maze-wrap{gap:22px}
+.maze-game{
+  background:linear-gradient(145deg,rgba(255,255,255,.68),rgba(255,232,239,.58));
+  border:1px solid rgba(255,255,255,.75);
+  box-shadow:0 28px 80px rgba(90,31,53,.14), inset 0 1px 0 rgba(255,255,255,.8);
+  gap:5px;
+}
+.maze-cell{border-radius:14px}
+.maze-wall{
+  background:linear-gradient(145deg,#73304a,#b84f75);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 8px 16px rgba(90,31,53,.12);
+}
+.maze-path{
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(255,255,255,.62);
+}
+.maze-visited{
+  background:linear-gradient(145deg,#fff3f7,#ffd8e4);
+  box-shadow:inset 0 0 0 2px rgba(231,111,149,.20);
+}
+.maze-player{
+  background:linear-gradient(145deg,#fff,#ff9fba);
+  box-shadow:0 14px 32px rgba(184,50,99,.24);
+}
+.maze-goal{
+  background:radial-gradient(circle,#fff 0%,#ffd1df 70%);
+  box-shadow:inset 0 0 0 2px rgba(231,111,149,.28),0 12px 28px rgba(184,50,99,.12);
+}
+.maze-controls button{
+  background:rgba(255,255,255,.68);
+  backdrop-filter:blur(14px);
+}
+.maze-tip,.maze-mini{color:#73304a}
+
+.carta{
+  background:linear-gradient(145deg,#fffefd,#fff5f8);
+  border:1px solid rgba(255,255,255,.78);
+  box-shadow:0 34px 100px rgba(90,31,53,.16), inset 0 1px 0 rgba(255,255,255,.85);
+  line-height:1.78;
+}
+.carta::before{
+  background:linear-gradient(145deg,#e76f95,#ffd1dc 54%,#fff1f5);
+}
+.carta p{font-size:1.02rem;color:#5f293e}
+
+.love-toast{
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(255,255,255,.78);
+  box-shadow:0 18px 50px rgba(90,31,53,.14);
+  color:#73304a;
+}
+.sparkle{
+  width:5px;height:5px;
+  background:rgba(255,255,255,.96);
+  box-shadow:0 0 12px rgba(231,111,149,.45);
+}
+
+.premium-orb{
+  position:fixed;
+  width:220px;
+  height:220px;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:-1;
+  filter:blur(12px);
+  opacity:.25;
+  background:radial-gradient(circle,rgba(255,159,186,.75),transparent 66%);
+  animation:orbFloat 14s ease-in-out infinite alternate;
+}
+.premium-orb.one{left:-60px;top:14%}
+.premium-orb.two{right:-70px;bottom:12%;animation-delay:-5s;background:radial-gradient(circle,rgba(255,214,226,.95),transparent 66%)}
+@keyframes orbFloat{
+  from{transform:translate3d(0,0,0) scale(1)}
+  to{transform:translate3d(34px,-26px,0) scale(1.08)}
+}
+
+@media(max-width:650px){
+  .box{padding:24px;border-radius:30px}
+  .slide{padding:14px}
+  .memory-grid{gap:8px}
+  .memory-card{border-radius:15px}
+  .album-card{border-radius:28px}
+}
+
+
+/* AJUSTES PREMIUM: fundo mais visível e mensagem saindo do coração */
+body::before{
+  filter:blur(3px) saturate(1.12) brightness(1.08) !important;
+  opacity:.58 !important;
+}
+
+body::after{
+  opacity:.22 !important;
+  background:radial-gradient(circle at 50% 45%,rgba(255,255,255,.16),transparent 58%) !important;
+}
+
+.box{
+  background:linear-gradient(145deg,rgba(255,255,255,.70),rgba(255,247,250,.50));
+}
+
+.explosion{
+  z-index:90;
+}
+
+.explosion::before{
+  background:radial-gradient(circle,rgba(255,255,255,.34),rgba(255,235,241,.20) 42%,rgba(255,235,241,0) 74%) !important;
+  backdrop-filter:blur(1.5px) !important;
+}
+
+.explosion-content{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+.heart-message{
+  position:absolute;
+  top:58%;
+  min-width:min(520px,84vw);
+  padding:15px 24px;
+  border-radius:999px;
+  background:rgba(255,255,255,.82);
+  border:1px solid rgba(255,255,255,.82);
+  box-shadow:0 22px 60px rgba(90,31,53,.16);
+  backdrop-filter:blur(18px);
+  color:#73304a;
+  font-weight:900;
+  text-align:center;
+  letter-spacing:-.02em;
+  opacity:0;
+  transform:translateY(8px) scale(.94);
+}
+
+.explosion.active .heart-message{
+  animation:messageFromHeart 2.15s cubic-bezier(.16,1,.3,1) forwards;
+}
+
+.explosion.active .big-heart{
+  animation:heartPremiumUnlock 2.15s cubic-bezier(.16,1,.3,1) forwards;
+}
+
+@keyframes heartPremiumUnlock{
+  0%{transform:scale(.35);opacity:0;filter:blur(4px)}
+  22%{transform:scale(1.05);opacity:1;filter:blur(0)}
+  42%{transform:scale(.95)}
+  70%{transform:scale(1.08);opacity:1}
+  100%{transform:scale(1.48);opacity:0}
+}
+
+@keyframes messageFromHeart{
+  0%,24%{opacity:0;transform:translateY(0) scale(.86)}
+  38%{opacity:1;transform:translateY(74px) scale(1)}
+  76%{opacity:1;transform:translateY(74px) scale(1)}
+  100%{opacity:0;transform:translateY(56px) scale(.98)}
+}
+
+.love-toast{display:none !important}
+
+/* AJUSTES PREMIUM: conquistas apenas no coração */
+.success{display:none !important}
+.heart-message{
+  min-width:220px;
+  padding:13px 22px;
+  border-radius:999px;
+  background:rgba(255,255,255,.84);
+  border:1px solid rgba(255,255,255,.72);
+  box-shadow:0 18px 55px rgba(184,50,99,.18);
+  color:#9f2f5d;
+  font-weight:900;
+  letter-spacing:.02em;
+}
+.explosion::before{
+  background:radial-gradient(circle,rgba(255,255,255,.68),rgba(255,214,229,.24) 42%,rgba(255,214,229,0) 70%);
+}
+
+
+/* RETOQUES PREMIUM ADICIONADOS SEM MUDAR A BASE */
+.subtitle-premium{
+  margin-top:-6px;
+  margin-bottom:12px;
+  font-weight:700;
+  color:#8f244e;
+}
+
+.contador-amor{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin:8px auto 18px;
+  padding:11px 18px;
+  border-radius:999px;
+  background:rgba(255,255,255,.62);
+  border:1px solid rgba(255,255,255,.78);
+  box-shadow:0 14px 34px rgba(184,50,99,.12);
+  color:#73304a;
+  font-weight:900;
+  backdrop-filter:blur(14px);
+}
+
+/* Álbum com efeito polaroid elegante */
+.polaroid-album{
+  padding:14px 14px 54px;
+  background:linear-gradient(145deg,#fff,#fff7fa);
+  border-radius:18px 18px 30px 30px;
+  transform:rotate(-1.2deg);
+  overflow:visible;
+}
+
+.polaroid-album::after{
+  content:"Nossa memória";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:16px;
+  text-align:center;
+  font-weight:900;
+  color:#9f2f5b;
+  letter-spacing:.03em;
+}
+
+.polaroid-album img{
+  border-radius:14px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.7);
+}
+
+.polaroid-album.change{
+  animation:polaroidPass .9s cubic-bezier(.16,1,.3,1);
+}
+
+@keyframes polaroidPass{
+  0%{transform:rotate(-1.2deg) translateX(0) scale(1);opacity:1}
+  42%{transform:rotate(2.5deg) translateX(34px) scale(.97);opacity:.35}
+  100%{transform:rotate(-1.2deg) translateX(0) scale(1);opacity:1}
+}
+
+/* Final cinematográfico discreto */
+.final-cinematico{
+  position:relative;
+  margin:28px auto 0;
+  padding:28px 18px 10px;
+  text-align:center;
+  overflow:hidden;
+}
+
+.final-photo{
+  width:min(560px,88vw);
+  height:min(560px,58vh);
+  margin:0 auto 18px;
+  border-radius:34px;
+  overflow:hidden;
+  background:#fff0f5;
+  border:1px solid rgba(255,255,255,.8);
+  box-shadow:0 34px 100px rgba(90,31,53,.18),0 0 0 10px rgba(255,255,255,.22);
+  animation:finalPhotoReveal 1.2s cubic-bezier(.16,1,.3,1) both;
+}
+
+.final-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.final-cinematico h2{
+  margin-top:8px;
+  font-size:clamp(2rem,5vw,4rem);
+  animation:finalTextReveal 1.3s ease both;
+}
+
+.cinema-heart{
+  position:absolute;
+  bottom:-28px;
+  font-size:18px;
+  opacity:.22;
+  animation:cinemaHeartRise 8s linear forwards;
+  pointer-events:none;
+}
+
+@keyframes finalPhotoReveal{
+  from{opacity:0;transform:translateY(24px) scale(.96);filter:blur(8px)}
+  to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+}
+
+@keyframes finalTextReveal{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes cinemaHeartRise{
+  from{transform:translateY(0) scale(.85);opacity:0}
+  18%{opacity:.26}
+  to{transform:translateY(-520px) scale(1.2);opacity:0}
+}
+
+@media(max-width:650px){
+  .contador-amor{font-size:.88rem;padding:10px 14px}
+  .polaroid-album{padding:10px 10px 46px}
+  .final-photo{height:380px;border-radius:26px}
+}
+
+</style>
+</head>
+
+<body>
+<div class="soft-bg"></div>
+<div class="premium-orb one"></div>
+<div class="premium-orb two"></div>
+<div class="love-toast" id="loveToast">✨ Fase desbloqueada ✨</div>
+
+
+<button class="back" onclick="prevSlide()">←</button>
+
+<div class="explosion" id="explosion">
+  <div class="explosion-content">
+    <div class="big-heart">❤️</div>
+    <div class="heart-message" id="heartMessage">Fase desbloqueada</div>
+  </div>
+</div>
+
+<div class="slider" id="slider">
+
+<section class="slide">
+  <div class="box phase-in">
+    <h1>Uma surpresa para você ❤️</h1>
+    <p class="subtitle-premium"></p>
+    <p>Preparei uma experiência especial, feita com carinho, memórias e pequenas surpresas para você desbloquear.</p>
+    <button onclick="nextSlide()">Começar nossa aventura</button>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="box">
+    <h2>Nossas Memória ❤️</h2>
+    <p>Encontre os 8 pares com fotos diferentes para desbloquear o álbum.</p>
+    <h2>Pares: <span id="pairs">0</span>/8</h2>
+    <div class="memory-grid" id="memoryGrid"></div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="box">
+    <h2>Nossas memórias 📸</h2>
+
+    <div class="album-card polaroid-album" id="albumCard">
+      <img id="albumPhoto" data-img="foto1" alt="Nossa memória">
+      <div class="shine"></div>
+    </div>
+
+    <div class="memory-counter" id="albumText">Foto 1 de 4 ❤️</div>
+
+    <button onclick="nextPhoto()">Próxima foto</button>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="box">
+    <h2>O Quanto Você Me Conhece 💕</h2>
+    <p id="quizStatus">Pergunta 1 de 5</p>
+    <h2 id="question"></h2>
+    <div id="answers"></div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="box">
+    <h2>Vídeo desbloqueado 🎥</h2>
+    <p></p>
+    <div class="video-frame">
+      <video controls>
+        <source src="video.mp4" type="video/mp4">
+      </video>
+    </div>
+    <button onclick="nextSlide()">Próxima fase</button>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="box">
+    <h2>Nosso Lugar Favorito ✨</h2>
+    <p>Escolha onde seria o encontro perfeito comigo.</p>
+
+    <div class="choice-grid">
+      <button class="choice" onclick="dateGame(false,this)">🍕 Jantar</button>
+      <button class="choice" onclick="dateGame(false,this)">🎬 Cinema</button>
+      <button class="choice" onclick="dateGame(false,this)">🌊 Praia</button>
+      <button class="choice" onclick="dateGame(true,this)">❤️ Qualquer lugar com você</button>
+    </div>
+  </div>
+</section>
+
+
+<section class="slide">
+  <div class="box">
+    <h2>O Caminho Até Mim 💌</h2>
+    <p>Leve o coração até o final do labirinto para desbloquear a carta.</p>
+    <p class="maze-mini">Use os botões ou as setas do teclado.</p>
+
+    <div class="maze-wrap">
+      <div class="maze-game" id="mazeGame"></div>
+
+      <div class="maze-controls">
+        <span class="empty"></span>
+        <button onclick="moveMaze('up')">↑</button>
+        <span class="empty"></span>
+        <button onclick="moveMaze('left')">←</button>
+        <button onclick="resetMaze()">↺</button>
+        <button onclick="moveMaze('right')">→</button>
+        <span class="empty"></span>
+        <button onclick="moveMaze('down')">↓</button>
+        <span class="empty"></span>
+      </div>
+    </div>
+
+    <div class="maze-tip" id="mazeTip">Encontre o caminho até o coração final ❤️</div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="box">
+
+    <audio id="musicaCarta" class="music-hidden" loop preload="auto" playsinline>
+      <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <button id="botaoMusica" class="music-float" onclick="playFinalMusic()">🎵 Tocar música</button>
+
+    <div class="carta">
+      <h2>💌 Carta final desbloqueada</h2>
+
+      <p>Minha vida,</p>
+
+      <p>Neste Dia dos Namorados, quero que saiba o quanto sou grata por ter você na minha vida. Mais do que uma data especial, hoje é apenas uma lembrança de tudo o que sinto por você todos os dias.</p>
+
+      <p>Você chegou e transformou minha vida de uma forma que palavras dificilmente conseguem explicar. Sua presença me traz paz, alegria, e a certeza de que os melhores momentos da minha vida são aqueles que compartilho ao seu lado. Sou grata por cada sorriso, cada abraço, cada conversa, cada gesto de carinho e por todo amor que você me oferece.</p>
+
+      <p>Quero que saiba que não desejo você apenas neste Dia dos Namorados. Eu desejo você para todos os dias da minha vida. Quero continuar construindo histórias, realizando sonhos, superando desafios e celebrando conquistas ao seu lado. Quero envelhecer segurando sua mão e continuar escolhendo você, dia após dia.</p>
+
+      <p>Você é uma das pessoas mais especiais que já conheci, e meu coração transborda de felicidade por poder chamar você de meu amor. Obrigada por existir, por me amar e por tornar minha vida muito mais bonita.</p>
+
+      <p>Obrigada por ser meu namorado, meu carinho, minha paz e minha melhor escolha. Eu escolheria você de novo, em todos os dias, em todas as versões da vida. Porque, entre todas as possibilidades, é ao seu lado que meu coração encontra seu verdadeiro lar.</p>
+
+      <p>Hoje, amanhã e sempre, meu amor será seu. E se eu pudesse fazer apenas um pedido, seria ter você ao meu lado por toda a vida.</p>
+
+      <p>Feliz Dia dos Namorados, meu amor. Eu te amo mais do que as palavras podem expressar.</p>
+
+      <p>Com todo o meu amor. ❤️</p>
+
+      <div style="text-align:center;margin-top:25px;">
+        <button onclick="verDeNovo()">↺ Ver de novo</button>
+      </div>
+    </div>
+
+    <div class="final-cinematico">
+      <div class="cinema-hearts" aria-hidden="true"></div>
+      <div class="final-photo">
+        <img data-img="foto1" alt="Nossa melhor foto">
+      </div>
+      <h2>Eu te amo ❤️</h2>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<div class="nav" id="nav"></div>
+
+<script>
+const extensoes=["jpeg","jpg","png","webp"];
+
+function setImg(img,base){
+  let i=0;
+  function tentar(){
+    if(i>=extensoes.length){
+      img.alt="Imagem não encontrada";
+      return;
+    }
+    img.src=base+"."+extensoes[i];
+    i++;
+  }
+  img.onerror=tentar;
+  tentar();
+}
+
+function setMainBg(base){
+  const test=new Image();
+  let i=0;
+
+  function tentar(){
+    if(i>=extensoes.length)return;
+    const url=base+"."+extensoes[i];
+
+    test.onload=()=>{
+      document.body.style.setProperty("--main-bg",`url('${url}')`);
+    };
+
+    test.onerror=()=>{
+      i++;
+      tentar();
+    };
+
+    test.src=url;
+  }
+
+  tentar();
+}
+
+setMainBg("fundo");
+
+document.querySelectorAll("img[data-img]").forEach(img=>{
+  setImg(img,img.dataset.img);
+});
+
+let current=0;
+const total=8;
+const slider=document.getElementById("slider");
+const nav=document.getElementById("nav");
+
+for(let i=0;i<total;i++){
+  const dot=document.createElement("div");
+  dot.className="dot";
+  nav.appendChild(dot);
+}
+
+function update(){
+  slider.style.transform=`translateX(-${current*100}vw)`;
+  document.querySelectorAll(".dot").forEach((d,i)=>d.classList.toggle("active",i===current));
+  document.querySelectorAll(".box").forEach(b=>b.classList.remove("phase-in"));
+  setTimeout(()=>{
+    document.querySelectorAll(".slide")[current].querySelector(".box").classList.add("phase-in");
+  },100);
+}
+
+function nextSlide(){
+  if(current<total-1){
+    current++;
+    update();
+
+    if(current===total-1){
+      tryPlayFinalMusic();
+    }
+  }
+}
+
+function tryPlayFinalMusic(){
+  const musica=document.getElementById("musicaCarta");
+  const botao=document.getElementById("botaoMusica");
+  if(!musica)return;
+
+  musica.volume=.85;
+  const tentativa=musica.play();
+
+  if(tentativa && typeof tentativa.catch==="function"){
+    tentativa.then(()=>{
+      if(botao)botao.classList.remove("show");
+    }).catch(()=>{
+      // Se o navegador bloquear autoplay, aparece só um botão pequeno.
+      if(botao)botao.classList.add("show");
+    });
+  }
+}
+
+function playFinalMusic(){
+  const musica=document.getElementById("musicaCarta");
+  const botao=document.getElementById("botaoMusica");
+  if(!musica)return;
+  musica.volume=.85;
+  musica.play();
+  if(botao)botao.classList.remove("show");
+}
+
+function verDeNovo(){
+  const musica=document.getElementById("musicaCarta");
+  const botao=document.getElementById("botaoMusica");
+
+  if(musica){
+    musica.pause();
+    musica.currentTime=0;
+  }
+
+  if(botao)botao.classList.remove("show");
+
+  current=0;
+  update();
+}
+
+function prevSlide(){
+  if(current>0){
+    current--;
+    update();
+  }
+}
+
+update();
+
+function heartExplosion(message, callback){
+  if(typeof message === "function"){
+    callback = message;
+    message = "✨ Fase desbloqueada ✨";
+  }
+
+  const exp=document.getElementById("explosion");
+  const msg=document.getElementById("heartMessage");
+  if(msg)msg.innerText=message || "✨ Fase desbloqueada ✨";
+
+  exp.classList.remove("active");
+  void exp.offsetWidth;
+  exp.classList.add("active");
+
+  for(let i=0;i<34;i++){
+    const p=document.createElement("div");
+    const isHeart=i%5===0;
+    p.className=isHeart?"particle heart":"particle";
+    if(isHeart)p.innerText=["❤","♡","💗","✨"][Math.floor(Math.random()*4)];
+
+    const angle=(Math.PI*2*i/34)+(Math.random()*.22);
+    const distance=95+Math.random()*210;
+    p.style.left="50vw";
+    p.style.top="50vh";
+    p.style.setProperty("--x",Math.cos(angle)*distance+"px");
+    p.style.setProperty("--y",Math.sin(angle)*distance+"px");
+    p.style.setProperty("--r",(Math.random()*220-110)+"deg");
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),1700);
+  }
+
+  setTimeout(()=>{
+    exp.classList.remove("active");
+    if(callback)callback();
+  },2150);
+}
+
+/* JOGO DA MEMÓRIA */
+const fotosBase=[
+  "mem1","mem1",
+  "mem2","mem2",
+  "mem3","mem3",
+  "mem4","mem4",
+  "mem5","mem5",
+  "mem6","mem6",
+  "mem7","mem7",
+  "mem8","mem8"
+].sort(()=>Math.random()-.5);
+
+const memoryGrid=document.getElementById("memoryGrid");
+let first=null;
+let lock=false;
+let pairs=0;
+
+fotosBase.forEach(base=>{
+  const card=document.createElement("button");
+  card.className="memory-card";
+  card.dataset.value=base;
+  card.innerHTML="<span>❤️</span>";
+
+  card.onclick=()=>{
+    if(lock || card.classList.contains("matched") || card===first)return;
+
+    card.innerHTML=`<img data-img="${card.dataset.value}" alt="Foto da memória">`;
+    setImg(card.querySelector("img"),card.dataset.value);
+
+    if(!first){
+      first=card;
+      return;
+    }
+
+    if(first.dataset.value===card.dataset.value){
+      first.classList.add("matched");
+      card.classList.add("matched");
+      pairs++;
+      document.getElementById("pairs").innerText=pairs;
+      first=null;
+
+      if(pairs===8){
+        heartExplosion("Álbum desbloqueado", ()=>nextSlide());
+      }
+    }else{
+      lock=true;
+      setTimeout(()=>{
+        first.innerHTML="<span>❤️</span>";
+        card.innerHTML="<span>❤️</span>";
+        first=null;
+        lock=false;
+      },850);
+    }
+  };
+
+  memoryGrid.appendChild(card);
+});
+
+/* ÁLBUM */
+const album=[
+  {src:"foto1"},
+  {src:"foto2"},
+  {src:"foto3"},
+  {src:"foto4"}
+];
+
+let albumIndex=0;
+
+function nextPhoto(){
+  albumIndex++;
+
+  const card=document.getElementById("albumCard");
+  const photo=document.getElementById("albumPhoto");
+
+  if(albumIndex>=album.length){
+    document.getElementById("albumText").innerText="Fotos completas ❤️";
+    heartExplosion("Próxima surpresa", ()=>nextSlide());
+    return;
+  }
+
+  card.classList.add("change");
+
+  setTimeout(()=>{
+    setImg(photo,album[albumIndex].src);
+    document.getElementById("albumText").innerText=`Foto ${albumIndex+1} de ${album.length} ❤️`;
+  },450);
+
+  setTimeout(()=>{
+    card.classList.remove("change");
+  },900);
+}
+
+/* QUIZ */
+const questions=[
+  {q:"Quem é a pessoa mais especial do meu mundo?",a:["Meu amor ","Meu bem ","Minha vida ","Todas as alternativas"],c:3},
+  {q:"O que eu mais amo em você?",a:["Seu sorriso ","Seu carinho 🥰","Seu jeitinho ❤️","Tudo em você 💖"],c:3},
+  {q:"Se eu pudesse escolher novamente...",a:["Escolher você ❤️","Escolher você de novo ❤️","Escolher você para sempre ❤️","Todas as alternativas"],c:3},
+  {q:"Qual é o nosso superpoder?",a:["Rir juntos ","Nos apoiar 🤝","Criar memórias lindas 📸","Todos eles ❤️"],c:3},
+  {q:"Qual é a frase mais verdadeira?",a:["Gosto de você ","Adoro você 💕","Amo você 💖","Amo você infinitamente ❤️"],c:3}
+];
+
+let qi=0,score=0;
+const question=document.getElementById("question");
+const answers=document.getElementById("answers");
+const quizStatus=document.getElementById("quizStatus");
+
+function loadQuiz(){
+  if(qi>=questions.length){
+    quizStatus.innerText="Quiz finalizado 💖";
+    question.innerText=`Você fez ${score}/${questions.length} pontos, meu amor`;
+    answers.innerHTML="";
+    heartExplosion("Vídeo desbloqueado", ()=>nextSlide());
+    return;
+  }
+
+  let q=questions[qi];
+  quizStatus.innerText=`Pergunta ${qi+1} de ${questions.length}`;
+  question.innerText=q.q;
+  answers.innerHTML="";
+
+  q.a.forEach((txt,i)=>{
+    let b=document.createElement("button");
+    b.className="option";
+    b.innerText=txt;
+
+    b.onclick=()=>{
+      const buttons=answers.querySelectorAll("button");
+      buttons.forEach(btn=>btn.disabled=true);
+
+      if(i===q.c){
+        score++;
+        b.style.background="#d8f8df";
+        b.innerText="💖 " + b.innerText;
+      }else{
+        b.style.background="#ffd3dd";
+        buttons[q.c].style.background="#d8f8df";
+      }
+
+      qi++;
+      setTimeout(loadQuiz,1000);
+    };
+
+    answers.appendChild(b);
+  });
+}
+
+loadQuiz();
+
+
+/* LABIRINTO DO AMOR */
+const mazeMap=[
+  "S........",
+  ".#######.",
+  ".#.....#.",
+  ".#.###.#.",
+  ".#.#...#.",
+  ".#.#.###.",
+  ".#.#.....",
+  ".#.#####.",
+  "...#....G"
+];
+
+let mazePlayer={row:0,col:0};
+let mazeFinished=false;
+const mazeGame=document.getElementById("mazeGame");
+
+function drawMaze(){
+  if(!mazeGame)return;
+  mazeGame.innerHTML="";
+
+  mazeMap.forEach((line,row)=>{
+    [...line].forEach((cell,col)=>{
+      const div=document.createElement("div");
+      div.className="maze-cell " + (cell==="#" ? "maze-wall" : "maze-path");
+      div.dataset.row=row;
+      div.dataset.col=col;
+
+      if(cell==="G"){
+        div.classList.add("maze-goal");
+        div.innerText="❤️";
+      }
+
+      if(row===mazePlayer.row && col===mazePlayer.col){
+        div.classList.add("maze-player");
+        div.innerText="💖";
+      }
+
+      mazeGame.appendChild(div);
+    });
+  });
+}
+
+function resetMaze(){
+  mazePlayer={row:0,col:0};
+  mazeFinished=false;
+  document.getElementById("mazeTip").innerText="Encontre o caminho até o coração final ";
+  drawMaze();
+}
+
+function moveMaze(direction){
+  if(mazeFinished)return;
+
+  const moves={
+    up:{row:-1,col:0},
+    down:{row:1,col:0},
+    left:{row:0,col:-1},
+    right:{row:0,col:1}
+  };
+
+  const move=moves[direction];
+  if(!move)return;
+
+  const newRow=mazePlayer.row+move.row;
+  const newCol=mazePlayer.col+move.col;
+
+  if(!mazeMap[newRow] || !mazeMap[newRow][newCol] || mazeMap[newRow][newCol]==="#"){
+    document.getElementById("mazeTip").innerText="Ops, tem uma parede aí. Tente outro lado ";
+    mazeGame.classList.add("shake-board");
+    setTimeout(()=>mazeGame.classList.remove("shake-board"),350);
+    return;
+  }
+
+  const oldCell=mazeGame.querySelector(`[data-row="${mazePlayer.row}"][data-col="${mazePlayer.col}"]`);
+  if(oldCell)oldCell.classList.add("maze-visited");
+
+  mazePlayer={row:newRow,col:newCol};
+  drawMaze();
+
+  if(mazeMap[newRow][newCol]==="G"){
+    mazeFinished=true;
+    document.getElementById("mazeTip").innerText="Você chegou no final do labirinto ";
+    heartExplosion("Para você", ()=>nextSlide());
+  }else{
+    document.getElementById("mazeTip").innerText="Isso! Continue seguindo o caminho do amor ";
+  }
+}
+
+document.addEventListener("keydown",e=>{
+  const keys={ArrowUp:"up",ArrowDown:"down",ArrowLeft:"left",ArrowRight:"right"};
+  if(keys[e.key]){
+    e.preventDefault();
+    moveMaze(keys[e.key]);
+  }
+});
+
+drawMaze();
+
+/* ENCONTRO */
+function dateGame(correct,btn){
+  const buttons=document.querySelectorAll(".choice");
+  buttons.forEach(b=>b.disabled=true);
+
+  if(correct){
+    btn.style.background="linear-gradient(135deg,#d8f8df,#f3fff6)";
+  }else{
+    btn.style.background="linear-gradient(135deg,#ffd3dd,#fff0f5)";
+  }
+
+  heartExplosion("Desbloqueado", ()=>nextSlide());
+}
+
+
+/* EFEITOS VISUAIS DISCRETOS */
+function showLoveToast(text){
+  const toast=document.getElementById("loveToast");
+  if(!toast)return;
+  toast.innerText=text;
+  toast.classList.remove("show");
+  void toast.offsetWidth;
+  toast.classList.add("show");
+}
+
+function criarSparkle(x,y){
+  const sp=document.createElement("span");
+  sp.className="sparkle";
+  sp.style.left=x+"px";
+  sp.style.top=y+"px";
+  sp.style.setProperty("--sx",(Math.random()*44-22)+"px");
+  sp.style.setProperty("--sy",(Math.random()*44-22)+"px");
+  document.body.appendChild(sp);
+  setTimeout(()=>sp.remove(),850);
+}
+
+document.addEventListener("pointerdown",e=>{
+  for(let i=0;i<5;i++){
+    setTimeout(()=>criarSparkle(e.clientX,e.clientY),i*45);
+  }
+});
+
+
+/* TOQUE PREMIUM: parallax suave dos cards */
+document.addEventListener("pointermove",e=>{
+  const box=document.querySelectorAll(".slide")[current]?.querySelector(".box");
+  if(!box)return;
+  const x=(e.clientX/window.innerWidth-.5)*8;
+  const y=(e.clientY/window.innerHeight-.5)*8;
+  box.style.transform=`translate3d(${x*.25}px,${y*.25}px,0)`;
+});
+
+document.addEventListener("pointerleave",()=>{
+  document.querySelectorAll(".box").forEach(b=>b.style.transform="");
+});
+
+
+/* RETOQUE PREMIUM: FINAL CINEMATOGRÁFICO */
+function iniciarFinalCinematico(){
+  const area=document.querySelector(".cinema-hearts");
+  if(!area || area.dataset.started==="true")return;
+  area.dataset.started="true";
+
+  setInterval(()=>{
+    if(current!==total-1)return;
+
+    const h=document.createElement("span");
+    h.className="cinema-heart";
+    h.innerText=["♡","❤️","💕"][Math.floor(Math.random()*3)];
+    h.style.left=(8+Math.random()*84)+"%";
+    h.style.animationDuration=(6+Math.random()*4)+"s";
+    area.appendChild(h);
+    setTimeout(()=>h.remove(),10000);
+  },900);
+}
+
+iniciarFinalCinematico();
+
+</script>
+
+</body>
+</html>
